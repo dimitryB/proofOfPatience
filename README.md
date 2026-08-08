@@ -89,9 +89,6 @@ The tuning constants and question catalog live in [lib/pop.ts](lib/pop.ts).
 9. op-reth DONE?
 10. WHERE IS JUSTIN?
 
-POP V2.1 is intentionally absent. Do not rename or remove catalog entries
-without product-owner approval.
-
 ## Technology
 
 - TypeScript
@@ -161,7 +158,6 @@ docs/                        Developer handoff and blockchain plan
 - Keep keyboard, pointer, and touch controls.
 - Keep gameplay free. Do not require a wallet before playing.
 - Store only final results onchain, not each shot or animation frame.
-- Never add POP V2.1.
 - Treat the copy as fictional community satire, not as factual allegations.
 - Do not add real names, likenesses, or community handles without permission.
 
