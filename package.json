@@ -1,0 +1,56 @@
+{
+  "name": "proof-of-patience-pop",
+  "version": "0.1.0",
+  "description": "A five-minute community-satire arcade game built for the Hemi Arcade contest.",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
+    "build": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
+    "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
+    "test": "npm run test:contract && npm run test:worker && npm run build && node --test tests/rendered-html.test.mjs",
+    "test:contract": "hardhat test nodejs --build-profile production",
+    "test:worker": "node --test tests/chain-state.test.mjs",
+    "contract:compile": "hardhat compile --build-profile production",
+    "contract:deploy:hemi": "npm run contract:check-params && hardhat ignition deploy --network hemi --build-profile production --parameters ignition/parameters/hemi-mainnet.json --deployment-id pop-hemi-mainnet --verify ignition/modules/ProofOfPatienceScores.ts",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern artifacts --ignore-pattern cache --ignore-pattern _to_delete",
+    "check": "npm run lint && npm test",
+    "contract:check-params": "node scripts/check-deploy-params.mjs"
+  },
+  "dependencies": {
+    "drizzle-orm": "0.45.2",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "viem": "2.55.8"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.37.1",
+    "@nomicfoundation/hardhat-toolbox-viem": "5.0.7",
+    "@openzeppelin/contracts": "5.4.0",
+    "@tailwindcss/postcss": "4.2.1",
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "@vitejs/plugin-rsc": "0.5.26",
+    "drizzle-kit": "0.31.10",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.2.6",
+    "hardhat": "3.12.0",
+    "miniflare": "4.20260515.0",
+    "react-server-dom-webpack": "19.2.8",
+    "tailwindcss": "4.2.1",
+    "typescript": "5.9.3",
+    "vinext": "0.0.50",
+    "vite": "8.0.13",
+    "wrangler": "4.92.0"
+  },
+  "overrides": {
+    "ws": "8.21.2"
+  },
+  "type": "module"
+}
