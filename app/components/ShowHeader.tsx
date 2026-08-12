@@ -28,6 +28,8 @@ export function ShowHeader({
   onOpenMix: () => void;
   onToggleSound: () => void;
 }) {
+  const buildLabel = import.meta.env.DEV ? "LOCAL BUILD" : "HEMI MAINNET";
+
   return (
     <header className="show-header">
       <div className="pop-mark">
@@ -93,7 +95,7 @@ export function ShowHeader({
         </button>
         <span className="build-tag">
           <i aria-hidden="true" />
-          LOCAL BUILD
+          {buildLabel}
         </span>
       </div>
     </header>

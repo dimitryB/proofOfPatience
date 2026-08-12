@@ -37,10 +37,13 @@ test("server-renders the POP community takeover", async () => {
   assert.match(html, /PROOF OF PATIENCE/);
   assert.match(html, /MIDWEEK WITH MAX/);
   assert.match(html, /COMMUNITY TAKEOVER/);
+  assert.match(html, /HEMI MAINNET/);
+  assert.match(html, /CONNECT WALLET/);
   assert.match(html, /GO LIVE/);
   assert.match(html, /10(?:<!-- -->)?-DEEP QUESTION BACKLOG/);
   assert.match(html, /WEN POP V2/);
   assert.doesNotMatch(html, /V2\.1|PRINCE OF SOON|wallet connection/i);
+  assert.doesNotMatch(html, /LOCAL BUILD/);
 });
 
 test("keeps the confirmed ten-question catalog without overlaps", () => {
