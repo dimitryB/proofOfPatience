@@ -115,7 +115,7 @@ export type QuestionKind =
   | "claim"
   | "ploutos"
   | "reth"
-  | "justin";
+  | "roadmap";
 
 export interface QuestionSpec {
   kind: QuestionKind;
@@ -262,9 +262,9 @@ export const QUESTION_SPECS: QuestionSpec[] = [
     motion: "straight",
   },
   {
-    kind: "justin",
-    label: "WHERE IS JUSTIN?",
-    shortLabel: "JUSTIN",
+    kind: "roadmap",
+    label: "WEN ROADMAP?",
+    shortLabel: "ROADMAP",
     speed: 45,
     words: 1,
     value: 250,

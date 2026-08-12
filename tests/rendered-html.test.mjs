@@ -67,7 +67,7 @@ test("keeps the confirmed ten-question catalog without overlaps", () => {
     "WEN POP CLAIM?",
     "PLOUTOS HACK?",
     "op-reth DONE?",
-    "WHERE IS JUSTIN?",
+    "WEN ROADMAP?",
   ]);
   assert.equal(labels.some((label) => /V2\.1/i.test(label)), false);
   assert.equal(labels.some((label) => /POP PAYOUTS|veHEMI PAYOUTS/i.test(label)), false);

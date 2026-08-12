@@ -87,7 +87,7 @@ The tuning constants and question catalog live in [lib/pop.ts](lib/pop.ts).
 7. WEN POP CLAIM?
 8. PLOUTOS HACK?
 9. op-reth DONE?
-10. WHERE IS JUSTIN?
+10. WEN ROADMAP?
 
 ## Technology
 
