@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { hashTypedData, verifyTypedData } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import {
+  GAME_VERSION,
+  scoreTypedData,
+  serializeScoreTypedData,
+} from "../lib/chain.ts";
 import * as pop from "../lib/pop.ts";
 import {
   LETTERS,
@@ -164,4 +171,42 @@ test("links a confirmed score directly to the leaderboards", async () => {
   assert.match(scoreControl, /VIEW LEADERBOARD/);
   assert.match(scoreControl, /href="#leaderboards"/);
   assert.match(scoreControl, /View transaction/);
+});
+
+test("serializes the same domain-bound score that the server verifies", async () => {
+  const account = privateKeyToAccount(
+    "0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  );
+  const contract = "0xAd093A653B3D9d2612D79cDa5e7A730cf439A0F7";
+  const submission = {
+    runId: `0x${"11".repeat(32)}`,
+    gameVersion: GAME_VERSION,
+    player: account.address,
+    score: 12_345,
+    survivalSeconds: 83,
+    answered: 7,
+    shots: 39,
+    hits: 28,
+    seed: `0x${"22".repeat(32)}`,
+    traceHash: `0x${"00".repeat(32)}`,
+    deadline: 2_000_000_000,
+  };
+
+  const serverTypedData = scoreTypedData(submission, contract);
+  const walletTypedData = JSON.parse(serializeScoreTypedData(submission, contract));
+
+  assert.deepEqual(walletTypedData.domain, {
+    name: "Proof of Patience",
+    version: "1",
+    chainId: 43_111,
+    verifyingContract: contract.toLowerCase(),
+  });
+  assert.ok(walletTypedData.types.EIP712Domain.length > 0);
+  assert.equal(hashTypedData(walletTypedData), hashTypedData(serverTypedData));
+
+  const signature = await account.signTypedData(walletTypedData);
+  assert.equal(
+    await verifyTypedData({ ...serverTypedData, address: account.address, signature }),
+    true,
+  );
 });

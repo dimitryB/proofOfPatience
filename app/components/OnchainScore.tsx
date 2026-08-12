@@ -7,7 +7,6 @@ import {
   http,
   isAddress,
   isHex,
-  serializeTypedData,
   type Address,
   type Hex,
 } from "viem";
@@ -21,6 +20,7 @@ import {
   hemiChain,
   proofOfPatienceScoresAbi,
   scoreTypedData,
+  serializeScoreTypedData,
   type ChainConfigResponse,
   type FinalRunResult,
   type PlayerStatusResponse,
@@ -296,12 +296,10 @@ export function OnchainScore({ result }: { result: FinalRunResult }) {
           traceHash: result.traceHash,
           deadline: Math.floor(Date.now() / 1_000) + 10 * 60,
         };
-        const typedData = scoreTypedData(submission, config.contractAddress);
-
         setState("signing");
         const playerSignature = await provider.request<Hex>({
           method: "eth_signTypedData_v4",
-          params: [player, serializeTypedData(typedData)],
+          params: [player, serializeScoreTypedData(submission, config.contractAddress)],
         });
         prepared = {
           contractAddress: config.contractAddress,

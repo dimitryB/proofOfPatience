@@ -1,8 +1,10 @@
 import {
   defineChain,
+  getTypesForEIP712Domain,
   hashTypedData,
   keccak256,
   parseAbi,
+  serializeTypedData,
   stringToHex,
   type Address,
   type Hex,
@@ -138,6 +140,29 @@ export function scoreTypedData(submission: ScoreSubmissionPayload, verifyingCont
     primaryType: "ScoreSubmission" as const,
     message: toTypedScoreSubmission(submission),
   };
+}
+
+/**
+ * JSON payload for `eth_signTypedData_v4`.
+ *
+ * Viem's hashing helpers infer the EIP712Domain fields from `domain`, but its
+ * serializer intentionally emits only domain fields declared in
+ * `types.EIP712Domain`. Supplying only the score struct therefore serialized
+ * `domain: {}` and made browser-wallet signatures impossible to verify against
+ * the domain-bound digest used by both the server and contract.
+ */
+export function serializeScoreTypedData(
+  submission: ScoreSubmissionPayload,
+  verifyingContract: Address,
+) {
+  const typedData = scoreTypedData(submission, verifyingContract);
+  return serializeTypedData({
+    ...typedData,
+    types: {
+      EIP712Domain: getTypesForEIP712Domain({ domain: typedData.domain }),
+      ...typedData.types,
+    },
+  });
 }
 
 /** The envelope the verifier signs. `scoreHash` is the player's full digest. */
