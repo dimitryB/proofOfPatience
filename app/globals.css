@@ -1289,6 +1289,17 @@ button {
   color: var(--hemi-200);
 }
 
+.chain-status a {
+  color: var(--hemi-200);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.chain-status a:hover {
+  color: var(--hemi-100);
+  text-decoration: underline;
+}
+
 /* victory earns a warm lift from below; defeat stays cold and quiet */
 .stage-overlay.is-won {
   background:
@@ -1785,6 +1796,7 @@ button {
   display: grid;
   gap: var(--s-4);
   padding: var(--s-5);
+  scroll-margin-top: calc(var(--header-h, 0px) + var(--s-3));
   border-radius: var(--r-panel);
   background:
     linear-gradient(110deg, rgb(122 30 0 / 0.18), transparent 46%),

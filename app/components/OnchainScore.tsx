@@ -411,15 +411,15 @@ export function OnchainScore({ result }: { result: FinalRunResult }) {
                       : state === "confirming"
                         ? "CONFIRM GAS…"
                         : state === "confirmed"
-                          ? "SCORE RECORDED"
+                          ? "VIEW LEADERBOARD"
                           : "RECORD ON HEMI";
 
   return (
     <div className="onchain-submit" title={message || config?.reason || undefined}>
       {state === "confirmed" && explorerUrl ? (
-        <a className="primary-control chain-control" href={explorerUrl} target="_blank" rel="noreferrer">
+        <a className="primary-control chain-control" href="#leaderboards">
           <span className="control-label">{label}</span>
-          <span aria-hidden="true">↗</span>
+          <span aria-hidden="true">↓</span>
         </a>
       ) : (
         <button type="button" className="primary-control chain-control" onClick={submit} disabled={disabled}>
@@ -430,6 +430,14 @@ export function OnchainScore({ result }: { result: FinalRunResult }) {
       <div ref={turnstileRef} className="turnstile-slot" aria-hidden={state !== "attesting"} />
       <p className={state === "error" ? "chain-status is-error" : "chain-status"} aria-live="polite">
         {message || config?.reason || "Wallet pays network gas · one recorded score every 24 hours"}
+        {state === "confirmed" && explorerUrl && (
+          <>
+            {" "}
+            <a href={explorerUrl} target="_blank" rel="noreferrer">
+              View transaction ↗
+            </a>
+          </>
+        )}
       </p>
     </div>
   );

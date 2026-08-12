@@ -130,7 +130,7 @@ export function Leaderboards() {
   }, [refresh]);
 
   return (
-    <section className="chain-leaderboards" aria-labelledby="chain-title">
+    <section id="leaderboards" className="chain-leaderboards" aria-labelledby="chain-title">
       <div className="chain-head">
         <div>
           <p className="panel-kicker">HEMI MAINNET · ONCHAIN RECORD</p>

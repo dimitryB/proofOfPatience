@@ -39,6 +39,7 @@ test("server-renders the POP community takeover", async () => {
   assert.match(html, /COMMUNITY TAKEOVER/);
   assert.match(html, /HEMI MAINNET/);
   assert.match(html, /CONNECT WALLET/);
+  assert.match(html, /id="leaderboards"/);
   assert.match(html, /GO LIVE/);
   assert.match(html, /10(?:<!-- -->)?-DEEP QUESTION BACKLOG/);
   assert.match(html, /WEN POP V2/);
@@ -153,4 +154,14 @@ test("keeps backlog graphics and copy bound to the gameplay limit", async () => 
   assert.match(overlays, /QUEUE REACHED \$\{MAX_BACKLOG\}/);
   assert.match(howTo, /Array\.from\(\{ length: MAX_BACKLOG \}\)/);
   assert.doesNotMatch(`${overlays}\n${howTo}`, /queue reached eight|eight full slots/i);
+});
+
+test("links a confirmed score directly to the leaderboards", async () => {
+  const scoreControl = await readFile(
+    new URL("../app/components/OnchainScore.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(scoreControl, /VIEW LEADERBOARD/);
+  assert.match(scoreControl, /href="#leaderboards"/);
+  assert.match(scoreControl, /View transaction/);
 });
