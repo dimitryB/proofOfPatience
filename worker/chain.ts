@@ -647,8 +647,21 @@ async function handleLeaderboard(request: Request, env: ChainEnv, ctx: Execution
   const cacheKey = new Request(new URL("/api/chain/leaderboard", request.url).toString(), {
     method: "GET",
   });
-  const cache = (caches as unknown as { default: Cache }).default;
-  const cached = await cache.match(cacheKey);
+  // Sites deployments may run without Cloudflare's optional Cache API. The
+  // board can still be served from its durable D1 snapshot, so cache support
+  // must remain an optimization rather than a requirement.
+  let cache: Cache | undefined;
+  let cached: Response | undefined;
+  try {
+    cache =
+      typeof caches === "undefined"
+        ? undefined
+        : (caches as unknown as { default?: Cache }).default;
+    cached = await cache?.match(cacheKey);
+  } catch (error) {
+    cache = undefined;
+    console.warn("Proof of Patience: edge cache unavailable; continuing without it.", error);
+  }
   if (cached) return cached;
 
   const config = await readOnchainConfig(env, contractAddress);
@@ -723,7 +736,13 @@ async function handleLeaderboard(request: Request, env: ChainEnv, ctx: Execution
   const response = json(body, 200, {
     "cache-control": `public, max-age=${BOARD_CACHE_SECONDS}, s-maxage=${BOARD_CACHE_SECONDS}`,
   });
-  ctx.waitUntil(cache.put(cacheKey, response.clone()));
+  if (cache) {
+    ctx.waitUntil(
+      cache
+        .put(cacheKey, response.clone())
+        .catch((error) => console.warn("Proof of Patience: leaderboard cache write failed.", error)),
+    );
+  }
   return response;
 }
 
